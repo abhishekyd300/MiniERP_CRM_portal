@@ -3,6 +3,7 @@ import cors from 'cors';
 import 'express-async-errors';
 import { errorHandler } from './middleware/errorHandler';
 import authRoutes from './modules/auth/auth.routes';
+import customerRoutes from './modules/customers/customers.routes';
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.get('/api/health', (req, res) => {
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/customers', customerRoutes);
 
 // Central Error Middleware
 app.use(errorHandler);
