@@ -31,6 +31,14 @@ app.use('/api/customers', customerRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/challans', challanRoutes);
 
+// 404 Route Handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: `Cannot ${req.method} ${req.originalUrl} - Route not found`,
+  });
+});
+
 // Central Error Middleware
 app.use(errorHandler);
 
