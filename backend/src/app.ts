@@ -25,11 +25,18 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// API Routes
+// API Routes (supports both /api prefix and root level serverless routing)
 app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
+
 app.use('/api/customers', customerRoutes);
+app.use('/customers', customerRoutes);
+
 app.use('/api/products', productRoutes);
+app.use('/products', productRoutes);
+
 app.use('/api/challans', challanRoutes);
+app.use('/challans', challanRoutes);
 
 // 404 Route Handler
 app.use((req, res) => {
