@@ -82,9 +82,7 @@ export async function createChallan(req: Request, res: Response) {
         totalQuantity,
         createdById: req.user!.id,
         items: {
-          createMany: {
-            data: challanItemsData,
-          },
+          create: challanItemsData,
         },
       },
       include: {

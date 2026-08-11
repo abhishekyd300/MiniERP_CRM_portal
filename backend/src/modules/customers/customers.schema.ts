@@ -11,7 +11,7 @@ export const createCustomerSchema = z.object({
     type: z.nativeEnum(CustomerType).optional().default(CustomerType.RETAIL),
     address: z.string().min(1, 'Address is required'),
     status: z.nativeEnum(CustomerStatus).optional().default(CustomerStatus.LEAD),
-    followUpDate: z.string().datetime().optional().or(z.string().length(0)).or(z.null()),
+    followUpDate: z.string().optional().or(z.null()),
   }),
 });
 
@@ -25,7 +25,7 @@ export const updateCustomerSchema = z.object({
     type: z.nativeEnum(CustomerType).optional(),
     address: z.string().min(1).optional(),
     status: z.nativeEnum(CustomerStatus).optional(),
-    followUpDate: z.string().datetime().optional().or(z.string().length(0)).or(z.null()),
+    followUpDate: z.string().optional().or(z.null()),
   }),
 });
 

@@ -29,6 +29,14 @@ export function errorHandler(
     });
   }
 
+  // Handle Prisma Database Connection Errors
+  if (err instanceof Prisma.PrismaClientInitializationError) {
+    return res.status(503).json({
+      success: false,
+      error: 'Database connection error: Unable to connect to PostgreSQL. Please check DATABASE_URL in backend/.env',
+    });
+  }
+
   // Handle Prisma Known Request Errors
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     // P2025: Record to update/delete not found
