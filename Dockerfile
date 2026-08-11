@@ -27,14 +27,20 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=5000
 
-# Install Nginx to serve frontend static files and reverse proxy API calls
+# Install Nginx and build tools needed for native node modules
 RUN apk add --no-cache nginx
 
-# Copy backend built files & production node_modules
+# Copy backend package configs and dist files
 COPY --from=backend-builder /app/backend/package*.json ./backend/
 COPY --from=backend-builder /app/backend/dist ./backend/dist
 COPY --from=backend-builder /app/backend/prisma ./backend/prisma
-COPY --from=backend-builder /app/backend/node_modules ./backend/node_modules
+
+# Install production dependencies inside the runner environment (rebuilds native C++ binaries like bcrypt correctly)
+WORKDIR /app/backend
+RUN npm ci --only=production
+RUN npx prisma generate
+
+WORKDIR /app
 
 # Copy frontend static build files
 COPY --from=frontend-builder /app/frontend/dist /usr/share/nginx/html
