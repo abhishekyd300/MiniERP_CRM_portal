@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import 'express-async-errors';
 import { errorHandler } from './middleware/errorHandler';
+import authRoutes from './modules/auth/auth.routes';
 
 const app = express();
 
@@ -20,6 +21,9 @@ app.get('/api/health', (req, res) => {
     message: 'Backend server is running smoothly.'
   });
 });
+
+// API Routes
+app.use('/api/auth', authRoutes);
 
 // Central Error Middleware
 app.use(errorHandler);
