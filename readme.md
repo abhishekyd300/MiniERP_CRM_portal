@@ -27,11 +27,11 @@ A full-stack ERP/CRM system built for a wholesale/distribution business, coverin
 
 | Item | Link |
 |---|---|
-| GitHub Repository | `[(https://github.com/abhishekyd300/MiniERP_CRM_portal) ]` |
-| Live Frontend URL | `[ (minicrmportal.vercel.app) ]` |
-| Live Backend API URL | `[ (https://minicrm-backend.vercel.app/) ]` |
-| Screen Recording | `[https://drive.google.com/file/d/192-ULMJRiQOsuETl-6uTxvwYEg3vV6K9/view?usp=drive_link]` |
-
+| GitHub Repository | [https://github.com/abhishekyd300/MiniERP_CRM_portal](https://github.com/abhishekyd300/MiniERP_CRM_portal) |
+| Live Frontend URL | [minicrmportal.vercel.app](https://minicrmportal.vercel.app) |
+| Live Backend API URL | [minicrm-backend.vercel.app](https://minicrm-backend.vercel.app/) |
+| Postman Collection | `[ link or /docs/postman_collection.json ]` |
+| Screen Recording | [Google Drive link](https://drive.google.com/file/d/192-ULMJRiQOsuETl-6uTxvwYEg3vV6K9/view?usp=drive_link) |
 ---
 
 ## Tech Stack
@@ -88,7 +88,7 @@ A full-stack ERP/CRM system built for a wholesale/distribution business, coverin
 
 ### Clone the repository
 ```bash
-git clone [ https://github.com/abhishekyd300/MiniERP_CRM_portal ]
+git clone [ https://github.com/abhishekyd300/MiniERP_CRM_portal ](https://github.com/abhishekyd300/MiniERP_CRM_portal)
 cd [ backend, frontend ]
 ```
 
