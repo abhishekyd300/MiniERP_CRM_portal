@@ -27,10 +27,10 @@ A full-stack ERP/CRM system built for a wholesale/distribution business, coverin
 
 | Item | Link |
 |---|---|
-| GitHub Repository | `[ repo URL ]` |
-| Live Frontend URL | `[ frontend URL ]` |
-| Live Backend API URL | `[ backend URL ]` |
-| Screen Recording | `[ link ]` |
+| GitHub Repository | `[(https://github.com/abhishekyd300/MiniERP_CRM_portal) ]` |
+| Live Frontend URL | `[ (minicrmportal.vercel.app) ]` |
+| Live Backend API URL | `[ (https://minicrm-backend.vercel.app/) ]` |
+| Screen Recording | `[https://drive.google.com/file/d/192-ULMJRiQOsuETl-6uTxvwYEg3vV6K9/view?usp=drive_link]` |
 
 ---
 
@@ -212,7 +212,6 @@ All endpoints return validation errors, proper HTTP status codes, and support pa
 
 - Challan numbers are auto-generated using the scheme `[ e.g. CH-YYYY-NNNNNN, sequential per year ]`.
 - Cancelling a **confirmed** challan `[ restores stock via an IN movement / does not restore stock — state your actual behavior ]`.
-- `[ Add any other assumption you made, e.g. GST number format, address as free text vs structured fields, role permission specifics ]`.
 
 ---
 
