@@ -5,9 +5,23 @@ import { ChallanStatus, Prisma, StockMovementType } from '@prisma/client';
 
 async function generateChallanNumber(tx: Prisma.TransactionClient): Promise<string> {
   const year = new Date().getFullYear();
-  const count = await tx.challan.count();
-  const sequentialNum = (count + 1).toString().padStart(6, '0');
-  return `CH-${year}-${sequentialNum}`;
+  const prefix = `CH-${year}-`;
+
+  const lastChallan = await tx.challan.findFirst({
+    where: { challanNumber: { startsWith: prefix } },
+    orderBy: { challanNumber: 'desc' },
+  });
+
+  let nextSeq = 1;
+  if (lastChallan) {
+    const parts = lastChallan.challanNumber.split('-');
+    const lastSeq = parseInt(parts[parts.length - 1], 10);
+    if (!isNaN(lastSeq)) {
+      nextSeq = lastSeq + 1;
+    }
+  }
+
+  return `${prefix}${nextSeq.toString().padStart(6, '0')}`;
 }
 
 export async function createChallan(req: Request, res: Response) {
@@ -318,26 +332,42 @@ export async function confirmChallan(req: Request, res: Response) {
 
   try {
     const confirmedChallan = await prisma.$transaction(async (tx) => {
-      // 1. Re-verify stock levels for all line items
+      // 1. Aggregate required quantities by productId to properly validate duplicate line items
+      const requiredQuantities = new Map<
+        string,
+        { totalQty: number; productName: string; sku: string }
+      >();
+
       for (const item of challan.items) {
+        const existing = requiredQuantities.get(item.productId) || {
+          totalQty: 0,
+          productName: item.productNameSnapshot,
+          sku: item.skuSnapshot,
+        };
+        existing.totalQty += item.quantity;
+        requiredQuantities.set(item.productId, existing);
+      }
+
+      // 2. Re-verify stock levels for aggregated items
+      for (const [productId, reqItem] of requiredQuantities.entries()) {
         const product = await tx.product.findUnique({
-          where: { id: item.productId },
+          where: { id: productId },
         });
 
         if (!product) {
           throw new Error(
-            `Product "${item.productNameSnapshot}" (SKU: ${item.skuSnapshot}) no longer exists in catalog.`
+            `Product "${reqItem.productName}" (SKU: ${reqItem.sku}) no longer exists in catalog.`
           );
         }
 
-        if (product.currentStock < item.quantity) {
+        if (product.currentStock < reqItem.totalQty) {
           throw new Error(
-            `Cannot confirm challan: Insufficient stock for "${product.name}" (SKU: ${product.sku}). Available stock: ${product.currentStock}, Required quantity: ${item.quantity}`
+            `Cannot confirm challan: Insufficient stock for "${product.name}" (SKU: ${product.sku}). Available stock: ${product.currentStock}, Required quantity: ${reqItem.totalQty}`
           );
         }
       }
 
-      // 2. Perform stock deductions via adjustStock helper
+      // 3. Perform stock deductions via adjustStock helper
       for (const item of challan.items) {
         await adjustStock({
           productId: item.productId,
@@ -349,7 +379,7 @@ export async function confirmChallan(req: Request, res: Response) {
         });
       }
 
-      // 3. Update Challan status to CONFIRMED
+      // 4. Update Challan status to CONFIRMED
       const updated = await tx.challan.update({
         where: { id },
         data: { status: ChallanStatus.CONFIRMED },
