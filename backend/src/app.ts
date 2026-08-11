@@ -5,6 +5,7 @@ import { errorHandler } from './middleware/errorHandler';
 import authRoutes from './modules/auth/auth.routes';
 import customerRoutes from './modules/customers/customers.routes';
 import productRoutes from './modules/products/products.routes';
+import challanRoutes from './modules/challans/challans.routes';
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/challans', challanRoutes);
 
 // Central Error Middleware
 app.use(errorHandler);
